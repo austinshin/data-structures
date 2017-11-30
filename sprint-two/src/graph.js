@@ -67,8 +67,10 @@ Graph.prototype.hasEdge = function(fromNode, toNode) {
 
 // Connects two nodes in a graph by adding an edge between them.
 Graph.prototype.addEdge = function(fromNode, toNode) {
-  var edge1 = [fromNode, toNode];
-  this.edges.push(edge1);
+  if (!this.hasEdge(fromNode, toNode)) {
+    var edge1 = [fromNode, toNode];
+    this.edges.push(edge1);
+  }
 };
 
 // Remove an edge between any two specified (by value) nodes.
@@ -91,6 +93,11 @@ Graph.prototype.forEachNode = function(cb) {
 
 /*
  * Complexity: What is the time complexity of the above functions?
- */
 
+
+hasEdge() = O(n)          can improve it to O(1) if we used a map/object data structure
+addEdge() = O(n)          can improve it to O(1) if we used a map/object data structure
+removeEdge() = O(n)       can improve it to O(1) if we used a map/object data structure   
+forEachNode() = O(n)
+*/
 
