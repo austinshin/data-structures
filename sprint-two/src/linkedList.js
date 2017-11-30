@@ -17,17 +17,16 @@ var LinkedList = function() {
 
   list.removeHead = function() {
     var holder;
-    var headNode = list.head;
-    if (headNode === null) {
+    if (list.head === null) {
       return null;
-    } else if (headNode === list.tail) {
-      holder = headNode.value;
-      headNode = null;
+    } else if (list.head === list.tail) {
+      holder = list.head.value;
+      list.head = null;
       list.tail = null;
       return holder;
     } else {
-      holder = headNode.value;
-      list.head = headNode.next;
+      holder = list.head.value;
+      list.head = list.head.next;
       return holder;
     }
   };
