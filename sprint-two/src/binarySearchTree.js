@@ -1,7 +1,7 @@
 var BinarySearchTree = function(value) {
 
   var BST = Object.create(BinarySearchTreeMethods);
-
+  
   BST.value = value;
   BST.left = null;
   BST.right = null;

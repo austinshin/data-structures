@@ -41,4 +41,13 @@ describe('tree', function() {
     expect(tree.contains(8)).to.equal(true);
   });
 
+  // ADDED TESTS
+  
+  it('ADDED TEST: its children should be instances of Tree', function() {
+    tree.addChild(5);
+    tree.addChild(6);
+    expect(tree.children[0].constructor.name).to.equal('Tree');
+    expect(tree.children[1].constructor.name).to.equal('Tree');
+  });
+
 });

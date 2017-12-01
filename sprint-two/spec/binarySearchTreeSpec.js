@@ -37,4 +37,12 @@ describe('binarySearchTree', function() {
     binarySearchTree.depthFirstLog(func);
     expect(array).to.eql([5, 2, 3, 7]);
   });
+
+  // ADDED TEST
+  it('ADDED TEST: left and right properties should be instances of binarySearchTree', function() {
+    binarySearchTree.insert(2);
+    binarySearchTree.insert(7);
+    expect(binarySearchTree.left.__proto__).to.equal(BinarySearchTreeMethods);
+    expect(binarySearchTree.right.__proto__).to.equal(BinarySearchTreeMethods);
+  });
 });

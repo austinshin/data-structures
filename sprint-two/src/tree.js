@@ -1,8 +1,10 @@
 var Tree = function(value) {
   var newTree = {};
-  newTree.value = value;
 
-  // your code here
+  // Added this line for the added test to check if the instance was created with this function due to functional pattern.
+  newTree.constructor = Tree;
+
+  newTree.value = value;
   newTree.children = [];  
   extend(newTree, treeMethods);
   return newTree;
@@ -39,4 +41,7 @@ treeMethods.contains = function(target) {
 
 /*
  * Complexity: What is the time complexity of the above functions?
- */
+addChild() = O(1)
+contains() = O(n) -- (best case O(1) find it in the parent tree) 
+
+*/

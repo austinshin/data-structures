@@ -24,7 +24,9 @@ describe('set', function() {
     expect(set.contains('Mel Gibson')).to.equal(false);
   });
 
-  it('should add different instances of the same array to a set', function() {
+  // Added Tests
+
+  it('ADDED TEST: should add different instances of the same array to a set', function() {
     var arr = [1, 2, 3];
     var arr2 = [1, 2, 3];
     set.add(arr);
@@ -32,7 +34,7 @@ describe('set', function() {
     expect(set.contains(arr2)).to.equal(true);
   });
 
-  it('should add different instances of the same object to a set', function() {
+  it('ADDED TEST: should add different instances of the same object to a set', function() {
     var obj1 = {x: 1};
     var obj2 = {x: 1};
     set.add(obj1);
