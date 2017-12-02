@@ -46,7 +46,6 @@ treeMethods.removeFromParent = function() {
     return;
   }
   for (var i = 0; i < parent.children.length; i++) {
-    // console.log("hello");
     if (this === parent.children[i]) {
       parent.children.splice(i, 1);
       parent = null;
