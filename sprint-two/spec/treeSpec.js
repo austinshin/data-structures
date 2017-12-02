@@ -50,7 +50,7 @@ describe('tree', function() {
     expect(tree.children[1].constructor.name).to.equal('Tree');
   });
 
-  it('should have correct parents and should remove its parents properly', function() {
+  it('ADDED TEST: should have correct parents and should remove its parents properly', function() {
     expect(tree.parent).to.equal(null);
     tree.addChild(5);
     tree.addChild(1);
@@ -59,6 +59,17 @@ describe('tree', function() {
     expect(tree.children[0].children[0].parent).to.equal(tree.children[0]);
     tree.children[0].children[0].removeFromParent();
     expect(tree.children[0].children.length).to.equal(0);
+  });
+
+  it('ADDED TEST: should run callback on all values when using traverse()', function() {
+    var array = [];
+    var func = function(value) { array.push(value); };
+    tree.addChild(2);
+    tree.addChild(3);
+    tree.addChild(7);
+    tree.children[0].addChild(8);
+    tree.traverse(func);
+    expect(array).to.eql([2, 8, 3, 7]);
   });
 
 });

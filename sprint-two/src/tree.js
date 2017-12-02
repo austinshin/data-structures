@@ -3,7 +3,6 @@ var Tree = function(value) {
 
   // Added this line for the added test to check if the instance was created with this function due to functional pattern.
   newTree.constructor = Tree;
-
   newTree.value = value;
   newTree.children = [];  
   newTree.parent = null;
@@ -54,9 +53,22 @@ treeMethods.removeFromParent = function() {
   }
 };
 
+treeMethods.traverse = function(callback) {
+  if (this.value === undefined && this.children.length === 0) {
+    return;
+  }
+  if (this.value !== undefined) {
+    callback(this.value);
+  }
+  for (var i = 0; i < this.children.length; i++) {
+    this.traverse.call(this.children[i], callback);
+  }
+};
+
 /*
  * Complexity: What is the time complexity of the above functions?
 addChild() = O(1)
 contains() = O(n) -- (best case O(1) find it in the parent tree) 
-
+removeFromParent() = O(n)
+traverse() = O(n)
 */
