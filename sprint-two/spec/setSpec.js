@@ -41,5 +41,19 @@ describe('set', function() {
     set.add(obj2);
     expect(set.contains(obj2)).to.equal(true);
   });
+
+  it('ADDED TEST: should not add duplicate numbers or boolean', function() {
+    var a = 1;
+    var b = 1;
+    set.add(a);
+    set.add(b);
+    expect(set.size()).to.equal(1);
+    var c = true;
+    var d = true;
+    set.add(c);
+    set.add(d);
+    expect(set.size()).to.equal(2);
+    
+  });
   
 });

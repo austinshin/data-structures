@@ -31,6 +31,11 @@ setPrototype.remove = function(item) {
   } 
 };
 
+//added a size method for testing purposes
+setPrototype.size = function() {
+  return this._storage.length;
+};
+
 /*
   
   Complexity: What is the time complexity of the above functions?
