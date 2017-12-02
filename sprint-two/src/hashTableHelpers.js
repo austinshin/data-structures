@@ -29,6 +29,7 @@ var LimitedArray = function(limit) {
     }
   };
 
+
   var checkLimit = function(index) {
     if (typeof index !== 'number') {
       throw new Error('setter requires a numeric index for its first argument');

@@ -26,38 +26,39 @@ remove:
 */
 HashTable.prototype.insert = function(k, v) {
   var index = getIndexBelowMaxForKey(k, this._limit);
-
-  var storageArr = this._storage.get(index);
+  var bucket = this._storage.get(index);
   
-  if (storageArr === undefined) {
+  if (bucket === undefined) {
     var emptyArr = [];
     var newArr = [k, v];
     emptyArr.push(newArr);    
     this._storage.set(index, emptyArr);
+    if (this.isAboveSeventyFive()) {
+      this.resize(true);
+    }
+  //if we're above 75% we call resize, above
     return;
   }
   
-  for (var i = 0; i < storageArr.length; i++) {
-    var stringifiedKey = JSON.stringify(storageArr[i][0]);
+  for (var i = 0; i < bucket.length; i++) {
+    var stringifiedKey = JSON.stringify(bucket[i][0]);
     if (stringifiedKey === JSON.stringify(k)) {
-      storageArr[i][1] = v;
+      bucket[i][1] = v;
       return;
     }
   }
-  
-  storageArr.push([k, v]);
-
+  bucket.push([k, v]);
 };
 
 HashTable.prototype.retrieve = function(k) {
   var index = getIndexBelowMaxForKey(k, this._limit);
-  var storageArr = this._storage.get(index);
+  var bucket = this._storage.get(index);
 
-  if (storageArr !== undefined) {
-    for (var i = 0; i < storageArr.length; i++) {
-      var stringifiedKey = JSON.stringify(storageArr[i][0]);
+  if (bucket !== undefined) {
+    for (var i = 0; i < bucket.length; i++) {
+      var stringifiedKey = JSON.stringify(bucket[i][0]);
       if (stringifiedKey === JSON.stringify(k)) {
-        return storageArr[i][1];
+        return bucket[i][1];
       }
     }
   }
@@ -65,21 +66,87 @@ HashTable.prototype.retrieve = function(k) {
 
 HashTable.prototype.remove = function(k) {
   var index = getIndexBelowMaxForKey(k, this._limit);
-  var storageArr = this._storage.get(index);
-  if (storageArr === undefined) {
+  var bucket = this._storage.get(index);
+  if (bucket === undefined) {
     return;
   }
-  for (var i = 0; i < storageArr.length; i++) {
-    var stringifiedKey = JSON.stringify(storageArr[i][0]);
+  for (var i = 0; i < bucket.length; i++) {
+    var stringifiedKey = JSON.stringify(bucket[i][0]);
     if (stringifiedKey === JSON.stringify(k)) {
-      storageArr.splice(i, 1);          
+      bucket.splice(i, 1);          
     }
   }
   
-  if (storageArr.length === 0) {
+  if (bucket.length === 0) {
     this._storage.set(index, undefined);
   }
+  
+  // if we're below 25% resize
+  if (this._limit > 8) {
+    if (this.isBelowTwentyFive()) {
+      this.resize(false);
+    }
+  }
 
+};
+
+HashTable.prototype.isAboveSeventyFive = function() {
+  var count = 0;
+ 
+  this._storage.each(function(bucket, i, storage) {
+    if (bucket === undefined) {
+    } else {
+      for (var j = 0; j < bucket.length; j++) {
+        count++;
+      }
+    }
+  });
+  if (count >= (this._limit * 3 / 4)) {
+    return true;
+  }
+  return false;
+};
+
+HashTable.prototype.isBelowTwentyFive = function() {
+  var count = 0;
+  this._storage.each(function(bucket, i, storage) {
+    if (bucket !== undefined) {
+      count++;
+    }
+  });
+  if (count <= (this._limit * 1 / 4)) {
+    return true;
+  }
+  return false;
+};
+
+
+
+HashTable.prototype.resize = function(above) {
+  var tempLimit;
+  if (above) {
+    tempLimit = this._limit * 2;
+  } else {
+    tempLimit = this._limit / 2;
+  }
+  var resizedLimitedArr = LimitedArray(tempLimit); // new limited arr
+  var tempPointer = this._storage;                 // old limited arr
+  this._storage = resizedLimitedArr;               // set storage to new limited arr
+  this._limit = tempLimit;
+  tempPointer.each(function(bucket, i, storage) {   // add old buckets to new storage
+    if (bucket === undefined) {
+    } else {
+      for (var j = 0; j < bucket.length; j++) {
+        this.insert(bucket[j][0], bucket[j][1]);
+      }
+    }
+  }.bind(this));
+  
+  // reassign new limit to old limit
+  // 1. create a new limited Array of this new limit.
+  // 2. use the hashtablehelpers.foreach to iterate
+  // 3. call insert on each one ON THE NEW LIMITED ARRAY
+  // 4. reassign storage to NEW LIMITED ARRAY
 };
 
 /*
@@ -87,57 +154,6 @@ HashTable.prototype.remove = function(k) {
 insert() = O(n)
 retrieve() = O(n)
 remove() = O(n)
- */
-
-
-
-
-// var HashTable = function() {
-//   this._limit = 8;
-//   this._storage = LimitedArray(this._limit);  
-// };
-
-// HashTable.prototype.insert = function(k, v) {
-//   var index = getIndexBelowMaxForKey(k, this._limit);
-  
-//   var retrieve = this._storage.get(index);
-//   if (retrieve === undefined) {
-//     var newObj = {};
-//     newObj[k] = v;
-//     this._storage.set(index, newObj);
-//   } else {
-//     retrieve[k] = v;
-//   }
-// };
-
-// HashTable.prototype.retrieve = function(k) {
-//   var index = getIndexBelowMaxForKey(k, this._limit);
-//   if (this._storage.get(index) === undefined) {
-//     return undefined;  
-//   }
-      
-  
-//   return this._storage.get(index)[k];
-// };
-
-// HashTable.prototype.remove = function(k) {
-//   var index = getIndexBelowMaxForKey(k, this._limit);
-//   var retrieve = this._storage.get(index);
-//   if (retrieve !== undefined) {
-//     delete retrieve[k];
-//     if (Object.keys(retrieve).length === 0 && retrieve.constructor === Object) {
-//       this._storage.set(index, undefined);
-//     } 
-//   }
-// };
-
-
-
-/*
- * Complexity: What is the time complexity of the above functions?
-insert() = O(1)
-retrieve() = O(1)
-remove() = O(1)
  */
 
 
