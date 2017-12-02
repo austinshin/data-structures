@@ -45,4 +45,15 @@ describe('binarySearchTree', function() {
     expect(binarySearchTree.left.__proto__).to.equal(BinarySearchTreeMethods);
     expect(binarySearchTree.right.__proto__).to.equal(BinarySearchTreeMethods);
   });
+  
+  it('ADDED TEST: should execute a callback on every value in a tree using "breadthFirstLog"', function() {
+    var array = [];
+    var addAndPush = function(value) { value += 1; array.push(value); };
+    binarySearchTree.insert(2);
+    binarySearchTree.insert(3);
+    binarySearchTree.insert(7);
+    binarySearchTree.breadthFirstLog(addAndPush);
+    expect(array).to.eql([6, 3, 8, 4]);
+  });
+  
 });
