@@ -50,4 +50,15 @@ describe('tree', function() {
     expect(tree.children[1].constructor.name).to.equal('Tree');
   });
 
+  it('should have correct parents and should remove its parents properly', function() {
+    expect(tree.parent).to.equal(null);
+    tree.addChild(5);
+    tree.addChild(1);
+    expect(tree.children[0].parent).to.equal(tree);
+    tree.children[0].addChild(2);
+    expect(tree.children[0].children[0].parent).to.equal(tree.children[0]);
+    tree.children[0].children[0].removeFromParent();
+    expect(tree.children[0].children.length).to.equal(0);
+  });
+
 });
