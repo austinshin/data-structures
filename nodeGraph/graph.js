@@ -5,7 +5,7 @@ var Graph = function() {
   this.nodes = []; //these are GraphNode objects that hold values
   this.edges = []; //these are pairings of arrays
 };
-
+module.exports = Graph;
 var GraphNode = function(value) {
   this.value = value;
 };

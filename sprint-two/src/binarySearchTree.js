@@ -5,6 +5,8 @@ var BinarySearchTree = function(value) {
   BST.value = value;
   BST.left = null;
   BST.right = null;
+  BST.depth = 1;
+  
 
   return BST;
 };
